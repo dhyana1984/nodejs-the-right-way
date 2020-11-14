@@ -7,6 +7,15 @@ const filename = process.argv[2]
 if (!filename) {
     throw Error('A file to watch must be specified!')
 }
-
-fs.watch(filename, () => console.log(`File ${filename} changed!`))
-console.log('Now watching target.txt for changes...')
+try {
+    fs.watch(filename, (event, filename) => {
+        console.log(`File ${filename} changed!`)
+        //监听文件删除
+        if (event === 'rename') {
+            console.log(`File ${filename} deleted!`)
+        }
+    })
+    console.log('Now watching target.txt for changes...')
+} catch (e) {
+    console.log(`ERROR: ${e.message}`)
+}
